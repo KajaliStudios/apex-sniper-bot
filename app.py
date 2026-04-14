@@ -9,7 +9,7 @@ app = Flask(__name__)
 # 🔐 YOUR CONFIG
 # =========================
 TOKEN = "8602858732:AAGV2AtJ-c3TdXQHBkrIH3fkPg96aGu0U-0"
-CHAT_ID = "1531088804"
+CHAT_ID = "-1003955329099"
 
 # =========================
 # 🚀 SEND TELEGRAM MESSAGE
