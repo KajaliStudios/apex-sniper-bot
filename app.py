@@ -14,14 +14,17 @@ def send_telegram(message):
     }
     requests.post(url, json=payload)
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['POST', 'GET', 'OPTIONS'])
 def webhook():
+    if request.method == 'OPTIONS':
+        return {"status": "ok"}
+
     data = request.json
     message = data.get("message", "No message")
 
     send_telegram(message)
 
-    return {"status": "ok"}
+    return {"status": "sent"}
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
