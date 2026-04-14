@@ -8,11 +8,14 @@ CHAT_ID = "1531088804"
 
 def send_telegram(message):
     formatted = f"""
-🎯 <b>Apex Sniper Pro</b>
+🎯 <b>APEX SNIPER PRO</b>
 
 {message}
 
-⚡ Trade Smart | Sniper Entry
+━━━━━━━━━━━━━━━
+⚡ <b>Trade Smart</b>
+📊 Risk: 1–2% per trade
+━━━━━━━━━━━━━━━
 """
 
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
@@ -21,6 +24,7 @@ def send_telegram(message):
         "text": formatted,
         "parse_mode": "HTML"
     }
+
     requests.post(url, json=payload)
 
 @app.route('/webhook', methods=['POST', 'GET', 'OPTIONS'])
