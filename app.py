@@ -1,58 +1,69 @@
-
 from flask import Flask, request
 import requests
-import os
 
 app = Flask(__name__)
 
 # =========================
-# 🔐 YOUR CONFIG
+# 🔐 CONFIG
 # =========================
 TOKEN = "8602858732:AAGV2AtJ-c3TdXQHBkrIH3fkPg96aGu0U-0"
-CHAT_ID = "-1003955329099"
+
+# 👉 ADD BOTH HERE
+FREE_GROUP_ID = "-1003952526649"
+VIP_CHANNEL_ID = "-1003952526649"
 
 # =========================
-# 🚀 SEND TELEGRAM MESSAGE
+# 🚀 SEND FUNCTION
 # =========================
-def send_telegram(message):
-    formatted = f"""
-🚨 <b>LIVE SIGNAL</b>
-
-{message}
-
-━━━━━━━━━━━━━━━
-📊 <b>APEX SNIPER PRO</b>
-⚠️ Risk 1–2% per trade
-━━━━━━━━━━━━━━━
-"""
-
+def send_telegram(chat_id, message):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 
     payload = {
-        "chat_id": CHAT_ID,
-        "text": formatted,
+        "chat_id": chat_id,
+        "text": message,
         "parse_mode": "HTML"
     }
 
-    try:
-        requests.post(url, json=payload)
-    except Exception as e:
-        print("Error:", e)
+    requests.post(url, json=payload)
 
 # =========================
-# 🔥 WEBHOOK ROUTE
+# 🔥 WEBHOOK
 # =========================
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.json
 
     if data and "message" in data:
-        send_telegram(data["message"])
+        msg = data["message"]
+
+        # 🔴 VIP gets full signal
+        vip_msg = f"""
+🚨 <b>VIP SIGNAL</b>
+
+{msg}
+
+━━━━━━━━━━━━━━━
+📊 APEX SNIPER PRO
+━━━━━━━━━━━━━━━
+"""
+
+        # 🟢 FREE gets simplified / delayed style
+        free_msg = f"""
+📢 <b>FREE SIGNAL</b>
+
+{msg}
+
+⚠️ Upgrade to VIP for real-time entries
+"""
+
+        # SEND
+        send_telegram(VIP_CHANNEL_ID, vip_msg)
+        send_telegram(FREE_GROUP_ID, free_msg)
 
     return "ok"
 
 # =========================
-# 🚀 START SERVER
+# 🚀 RUN
 # =========================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
