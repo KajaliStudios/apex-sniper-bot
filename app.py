@@ -7,10 +7,19 @@ TOKEN = "8602858732:AAGV2AtJ-c3TdXQHBkrIH3fkPg96aGu0U-0"
 CHAT_ID = "1531088804"
 
 def send_telegram(message):
+    formatted = f"""
+🎯 <b>Apex Sniper Pro</b>
+
+{message}
+
+⚡ Trade Smart | Sniper Entry
+"""
+
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID,
-        "text": message
+        "text": formatted,
+        "parse_mode": "HTML"
     }
     requests.post(url, json=payload)
 
