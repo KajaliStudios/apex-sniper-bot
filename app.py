@@ -1,43 +1,58 @@
+
 from flask import Flask, request
 import requests
+import os
 
 app = Flask(__name__)
 
+# =========================
+# 🔐 YOUR CONFIG
+# =========================
 TOKEN = "8602858732:AAGV2AtJ-c3TdXQHBkrIH3fkPg96aGu0U-0"
 CHAT_ID = "1531088804"
 
+# =========================
+# 🚀 SEND TELEGRAM MESSAGE
+# =========================
 def send_telegram(message):
     formatted = f"""
-🎯 <b>APEX SNIPER PRO</b>
+🚨 <b>LIVE SIGNAL</b>
 
 {message}
 
 ━━━━━━━━━━━━━━━
-⚡ <b>Trade Smart</b>
-📊 Risk: 1–2% per trade
+📊 <b>APEX SNIPER PRO</b>
+⚠️ Risk 1–2% per trade
 ━━━━━━━━━━━━━━━
 """
 
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+
     payload = {
         "chat_id": CHAT_ID,
         "text": formatted,
         "parse_mode": "HTML"
     }
 
-    requests.post(url, json=payload)
+    try:
+        requests.post(url, json=payload)
+    except Exception as e:
+        print("Error:", e)
 
-@app.route('/webhook', methods=['POST', 'GET', 'OPTIONS'])
+# =========================
+# 🔥 WEBHOOK ROUTE
+# =========================
+@app.route('/webhook', methods=['POST'])
 def webhook():
-    if request.method == 'OPTIONS':
-        return {"status": "ok"}
-
     data = request.json
-    message = data.get("message", "No message")
 
-    send_telegram(message)
+    if data and "message" in data:
+        send_telegram(data["message"])
 
-    return {"status": "sent"}
+    return "ok"
 
+# =========================
+# 🚀 START SERVER
+# =========================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
